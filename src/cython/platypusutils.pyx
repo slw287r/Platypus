@@ -104,7 +104,7 @@ def getSampleNamesAndLoadIterators(bamFileNames, regions, options):
         
         if not isIndexable(fileName):
             logger.error("Input file %s is not a BAM/CRAM file" %(fileName))
-            raise StandardError, "Input file %s is not a BAM/CRAM file" %(fileName)
+            raise Exception("Input file %s is not a BAM/CRAM file" %(fileName))
         
         bamFile = Samfile(fileName)
         bamFile._open('r', True)
@@ -130,7 +130,7 @@ def getSampleNamesAndLoadIterators(bamFileNames, regions, options):
                 samples.extend(samplesInBAM)
             
             elif len(samplesInBAM) == 0:
-                raise StandardError, "No sample information in RG tag in file %s" %(fileName)
+                raise Exception("No sample information in RG tag in file %s" %(fileName))
             
             else:
                 sampleName = theHeader['RG'][0]['SM']
@@ -139,7 +139,7 @@ def getSampleNamesAndLoadIterators(bamFileNames, regions, options):
             
             del(theHeader)
         
-        except StandardError, e:
+        except Exception as e:
             logger.debug("Error in BAM header sample parsing. Error was \n%s\n" %(e))
             sampleName = fileName.split("/")[-1][0:-4]
             samples.append(sampleName)
@@ -493,7 +493,7 @@ cdef list loadBAMData(list bamFiles, bytes chrom, int start, int end, options, l
             try:
                 region = "%s:%s-%s" %(chrom, start, end)
                 readIterator = reader.fetch(region)
-            except Exception, e:
+            except Exception as e:
                 logger.warning(e.message)
                 logger.debug("No data could be retrieved for sample %s in file %s in region %s" %(sample, reader.filename, "%s:%s-%s" %(chrom, start, end)))
                 readBuffers.append(theReadBuffer)
@@ -585,7 +585,7 @@ cdef list loadBAMData(list bamFiles, bytes chrom, int start, int end, options, l
             try:
                 region = "%s:%s-%s" %(chrom, start, end)
                 readIterator = reader.fetch( region )
-            except Exception, e:
+            except Exception as e:
                 logger.warning(e.message)
                 logger.debug("No data could be retrieved for sample %s in file %s in region %s" %(sample, reader.filename, "%s:%s-%s" %(chrom, start, end)))
                 if options.fileCaching == 2:
@@ -767,7 +767,7 @@ cdef int isHaplotypeValid(tuple variants):
         # This should never happen
         if thisVar.minRefPos > nextVar.minRefPos:
             logger.error("Variants %s and %s are out of order. This should never happen." %(thisVar, nextVar))
-            raise StandardError, "Variants out of order in haplotype!"
+            raise Exception("Variants out of order in haplotype!")
 
         # If this occurs then the haplotype is invalid. This will only happen if a deletion deletes the ref pos
         # of the next variant.
@@ -835,7 +835,7 @@ cdef Variant leftNormaliseIndel(Variant variant, FastaFile refFile, int maxReadL
     
     # This will invariably happen at the end of chromosomes, e.g. MT
     if bytesHapSeq[-1] != bytesRefSeq[-1] and windowMax != seqMax:
-        raise StandardError, "Variant %s not correctly normalised. \nRef = %s\nHap = %s" %(variant, bytesRefSeq, bytesHapSeq)
+        raise Exception("Variant %s not correctly normalised. \nRef = %s\nHap = %s" %(variant, bytesRefSeq, bytesHapSeq))
 
     cdef char* refSequence = bytesRefSeq
     cdef char* hapSequence = bytesHapSeq
@@ -917,7 +917,7 @@ cdef Variant leftNormaliseIndel(Variant variant, FastaFile refFile, int maxReadL
                 logger.error("Original variant was %s" %(variant))
                 logger.error(refSequence)
                 logger.error(hapSequence)
-                raise StandardError, "Error in variant conversion to standard format"
+                raise Exception("Error in variant conversion to standard format")
 
             return newVar
 
@@ -939,7 +939,7 @@ def getRegions(options):
     """
     if options.refFile.endswith(".gz") or options.refFile.endswith(".bz2") or options.refFile.endswith(".bgz"):
         logger.error("Reference file-name (%s) looks like a compressed file-name. Please un-compress the reference FASTA file before running Platypus" %(options.refFile))
-        raise StandardError, "Invalid reference FASTA file supplied"
+        raise Exception("Invalid reference FASTA file supplied")
 
     cdef FastaFile refFile = FastaFile(options.refFile, options.refFile + ".fai", parseNCBI = options.parseNCBI)
     
@@ -956,7 +956,7 @@ def getRegions(options):
     
     if not isIndexable(fileName):
         logger.error("Input file %s is not a BAM/CRAM file" %(fileName))
-        raise StandardError, "Input file %s is not a BAM/CRAM file" %(fileName)
+        raise Exception("Input file %s is not a BAM/CRAM file" %(fileName))
     
     file = htslibWrapper.Samfile(fileName)
     file._open('r', loadIndex=True)
@@ -1020,7 +1020,7 @@ def getRegions(options):
 
                 if regions[-1][2] - regions[-1][1] > 1e9:
                     logger.error("Input region (%s) is too long. Try again" %(region))
-                    raise StandardError, "Invalid input region: %s" (region)
+                    raise Exception("Invalid input region: %s" (region))
 
             elif len(split) == 1:
                 start = 1

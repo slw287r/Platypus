@@ -741,7 +741,7 @@ def report( counts, coverage ):
                                                                           epsilon ) ) )
     output.sort()
     for u,l,line in output:
-        print line
+        print(line)
 
 
 def parse_counts( infile ):
@@ -891,8 +891,8 @@ def fitmodel( counts, coverage ):
 #
 
 if len(sys.argv) not in [1,2,4,5]:
-    print "Usage: %s chromosome motiffile lowcovbam [maxcoverage]" % sys.argv[0]
-    print "Usage: %s [maxcoverage] < output"
+    print("Usage: %s chromosome motiffile lowcovbam [maxcoverage]" % sys.argv[0])
+    print("Usage: %s [maxcoverage] < output")
     sys.exit(1)
 
 coverage = 5
@@ -915,15 +915,15 @@ if len(sys.argv) == 5:
 
 motiffile = filez.open(motiffilename)
 
-print "# chromosome      \t",chromosome
-print "# bamfile         \t",lowcovbam
-print "# motifs          \t",motiffilename
-print "# maxcoverage     \t",coverage
-print "# processed motifs\t",maxprocessedmotifs
-print "# thinner         \t",thinner
-print "# min_tot_count   \t",min_tot_count
-print "# minanchor       \t",minanchor
-print "# minmapq         \t",minmapq
+print("# chromosome      \t",chromosome)
+print("# bamfile         \t",lowcovbam)
+print("# motifs          \t",motiffilename)
+print("# maxcoverage     \t",coverage)
+print("# processed motifs\t",maxprocessedmotifs)
+print("# thinner         \t",thinner)
+print("# min_tot_count   \t",min_tot_count)
+print("# minanchor       \t",minanchor)
+print("# minmapq         \t",minmapq)
 
 estimateErrorRate( chromosome, motiffile, lowcovbam,
                    minmapq=minmapq, minanchor=minanchor, coverage=coverage)

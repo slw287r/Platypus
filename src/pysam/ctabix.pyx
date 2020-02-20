@@ -2,7 +2,6 @@
 # adds doc-strings for sphinx
 
 import tempfile, os, sys, types, itertools, struct, ctypes, gzip
-from cpython cimport PyString_FromStringAndSize, PyString_AS_STRING
 cimport TabProxies
 
 ###################################################################################################

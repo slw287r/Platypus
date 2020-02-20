@@ -172,7 +172,7 @@ def PreprocessBam( bamFileName, fastaFileName, orphanBamFileName=None,
         num_reads += 1
 
         if num_reads % 100000 == 0:
-            print "Processed %s reads" % num_reads
+            print("Processed %s reads" % num_reads)
             if num_reads > maxNumReads:
                 break
 
@@ -327,7 +327,7 @@ def PreprocessBam( bamFileName, fastaFileName, orphanBamFileName=None,
         coveragebuf.enter( read, minAnchor )
 
     # Done        
-    print "Processed",num_reads,"reads"
+    print("Processed",num_reads,"reads")
     indelhistogram.computeModels()
     indelhistogram.output()
 
@@ -527,7 +527,7 @@ class Repeatqueue:
         seq = self.fastafile.fetch( chrom, start, end )
         if len(seq) == 0 and chrom not in self._warn_chromosomes:
             if len(self.fastafile.fetch( chrom, 0, 1 )) == 0:
-                print "*** Warning: chromosome '%s' appears to be absent from reference file '%s'" % (chrom, self.fastafile.filename)
+                print("*** Warning: chromosome '%s' appears to be absent from reference file '%s'" % (chrom, self.fastafile.filename))
                 self._warn_chromosomes[chrom] = 1
         if len(seq) < end-start:
             seq += "N"*(end-start-len(seq))
@@ -630,15 +630,15 @@ class IndelHistogram:
         except Exception:
             self.i = 0
         if self.i % 10000 == 0:
-            print "Histogram report:"
-            print "Num units: ",len(self.histograms) - self.numNoData
-            print "Num deleted:",self.numNoData
-            print "Num unit/replens: ", sum( len(self.histograms[repeatunit]) 
+            print("Histogram report:")
+            print("Num units: ",len(self.histograms) - self.numNoData)
+            print("Num deleted:",self.numNoData)
+            print("Num unit/replens: ", sum( len(self.histograms[repeatunit]) 
                                              for repeatunit in self.histograms 
-                                             if self.histograms[repeatunit] != None )
-            print "Num unit/replen/coverage:", sum( sum( len( hist_unit[replen] ) for replen in hist_unit ) 
+                                             if self.histograms[repeatunit] != None ))
+            print("Num unit/replen/coverage:", sum( sum( len( hist_unit[replen] ) for replen in hist_unit ) 
                                                     for hist_unit in self.histograms.values()
-                                                    if hist_unit != None )
+                                                    if hist_unit != None ))
                 
 
     def add( self, coverage, repeatunit, repeatlength, alleles ):
@@ -857,7 +857,7 @@ class IndelHistogram:
                                                                                                    het_estimates[ (repeat_unit, repeat_length) ],
                                                                                                    beta,
                                                                                                    epsilon ) )
-                print output[2]
+                print(output[2])
 
         # build models
         models = {}
@@ -881,19 +881,19 @@ class IndelHistogram:
                         model.append( model[-1] )
                     else:
                         ##DEBUG
-                        print " -- (repunit %s replen %s: extrapolating without data)" % (repeat_unit, len(model))
+                        print(" -- (repunit %s replen %s: extrapolating without data)" % (repeat_unit, len(model)))
                         model.append( model[-1] + extrapolate_exp )
                 # we have data; but extrapolate when the error rate or heterozygosity become too high
                 if (het_estimates[ (repeat_unit, repeat_length) ] > EXTRAPOLATION_HET_THRESHOLD or
                     results[repeat_unit][repeat_length] < -10.0*math.log(EXTRAPOLATION_RATE_THRESHOLD) / math.log(10.0)):
-                    print " -- repunit %s replen %s: prepare to extrapolating with data" % (repeat_unit, repeat_length)
+                    print(" -- repunit %s replen %s: prepare to extrapolating with data" % (repeat_unit, repeat_length))
                     extrapolated_rate = model[-1] + extrapolate_exp
                 else:
                     extrapolated_rate = model[-1]
                 model.append( min( extrapolated_rate, results[repeat_unit][repeat_length] ) )
                 ##DEBUG
                 if model[-1] == extrapolated_rate:
-                    print " -- repunit %s replen %s: extrapolating with data" % (repeat_unit, repeat_length)
+                    print(" -- repunit %s replen %s: extrapolating with data" % (repeat_unit, repeat_length))
             while model[-1] > 0:
                 model.append( model[-1] + extrapolate_exp )
             # convert to a string
@@ -909,14 +909,14 @@ class IndelHistogram:
                         break
                 else:
                     # specific model isn't predicting substantially larger indel rates -- superfluous
-                    print " Removing model for ",repeat_unit
+                    print(" Removing model for ",repeat_unit)
                     del models[repeat_unit]
 
         self.models = models
 
 
     def output(self):
-        print self.models
+        print(self.models)
 
 
 #########################################################################################
@@ -1259,7 +1259,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) != 4:
-        print "Usage: %s bamfile fastafile orphanfile" % sys.argv[0]
+        print("Usage: %s bamfile fastafile orphanfile" % sys.argv[0])
         sys.exit(1)
 
     bamname = sys.argv[1]

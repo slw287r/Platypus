@@ -549,7 +549,7 @@ cdef void callVariantsInRegion(bytes chrom, int start, int end, bamFiles, FastaF
     try:
         readBuffers = loadBAMData(bamFiles, chrom, start, end, options, samples, samplesByID, samplesByBAM, refSequence)
     
-    except Exception, e:
+    except Exception as e:
         logger.error('Exception in region %s:%s-%s. Error was %s' %(chrom, start, end, e))
         logger.warning("Region %s:%s-%s will be skipped" %(chrom, start, end))
         return
@@ -610,7 +610,7 @@ cdef void callVariantsInRegion(bytes chrom, int start, int end, bamFiles, FastaF
                 for readBuffer in readBuffers:
                     readBuffer.recompressReadsInCurrentWindow(start, end, refSequence, options.qualBinSize, options.compressReads)
         
-        except Exception, e:
+        except Exception as e:
             logger.exception('Exception in window %d-%d. Error was %s' %(window['startPos'],window['endPos'], e))
             logger.warning("Window %s:%s-%s will be skipped" %(chrom, window['startPos'],window['endPos']))
 
@@ -637,7 +637,7 @@ cdef void callHLAVariantsInRegion(bytes chrom, int start, int end, bamFiles, Fas
     try:
         readBuffers = loadBAMData(bamFiles, chrom, start, end, options, samples, samplesByID, samplesByBAM, refSequence)
 
-    except Exception, e:
+    except Exception as e:
         logger.error('Exception in region %s:%s-%s. Error was %s' %(chrom, start, end, e))
         logger.warning("Region %s:%s-%s will be skipped" %(chrom, start, end))
         return
@@ -685,7 +685,7 @@ cdef void callHLAVariantsInRegion(bytes chrom, int start, int end, bamFiles, Fas
             if len(window['variants']) > 0:
                 windowLongVars = callHLAVariantsInWindow(window, options, refFile, readBuffers, pop, start, end, refSequence)
                 longVarList.extend(windowLongVars)
-        except Exception, e:
+        except Exception as e:
             logger.exception('Exception in window %d-%d. Error was %s' %(window['startPos'],window['endPos'], e))
             logger.warning("Window %s:%s-%s will be skipped" %(chrom, window['startPos'],window['endPos']))
 
@@ -908,7 +908,7 @@ class PlatypusSingleProcess(object):
 
         if options.refFile.endswith(".gz") or options.refFile.endswith(".bz2") or options.refFile.endswith(".bgz"):
             logger.error("Reference file-name (%s) looks like a compressed file-name. Please un-compress the reference FASTA file before running Platypus" %(options.refFile))
-            raise StandardError, "Invalid reference FASTA file supplied"
+            raise Exception("Invalid reference FASTA file supplied")
 
         self.refFile = fastafile.FastaFile(options.refFile, options.refFile + ".fai")
 

@@ -259,7 +259,7 @@ def continueCalling(args):
             theIndex = index + 1
 
     if theIndex == -1:
-        raise StandardError, "Could not find region which was unfinished in input VCF"
+        raise Exception("Could not find region which was unfinished in input VCF")
 
     logger.info("Platypus will continue calling. Output will go to file %s." %(options.vcfFile))
 
@@ -434,7 +434,7 @@ def runVariantCaller(options, continuing=False):
         ch.setLevel(logging.INFO)
         fh.setLevel(logging.DEBUG)
     else:
-        raise StandardError, "Value of 'verbosity' input parameter must be between 0 and 3 inclusive"
+        raise Exception("Value of 'verbosity' input parameter must be between 0 and 3 inclusive")
 
     log.addHandler(ch)
     log.addHandler(fh)
@@ -489,7 +489,7 @@ def runVariantCaller(options, continuing=False):
         try:
             time.sleep(1)
         except KeyboardInterrupt:
-            print "KeyboardInterrupt detected, terminating all processes..."
+            print("KeyboardInterrupt detected, terminating all processes...")
             for process in processes:
                 process.terminate()
             log.error("Variant calling aborted due to keyboard interrupt")

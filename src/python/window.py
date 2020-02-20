@@ -231,7 +231,7 @@ class WindowGenerator(object):
                 logger.debug("")
 
             #if thisWindow['endPos'] <= thisWindow['variants'][-1].maxRefPos:
-            #    raise StandardError, "Shit. Problem with window %s" %(thisWindow)
+            #    raise Exception("Shit. Problem with window %s" %(thisWindow))
 
             #logger.info(thisWindow)
             #logger.debug("Window size = %s" %(thisWindow['endPos'] - thisWindow['startPos']))
