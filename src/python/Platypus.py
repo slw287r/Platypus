@@ -38,7 +38,7 @@ if __name__ == "__main__":
         sys.exit(0)
     if sys.version_info[0] != 3:
         print("\n\n")
-        print("Platypus works only with Python versions 3.0 and greater. Python 3.X is not yet supported.")
+        print("Platypus works only with Python versions 3.0 and greater. Python 2.X is not yet supported.")
         print("\n\n")
         sys.exit(0)
     else:
